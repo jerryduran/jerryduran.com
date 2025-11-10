@@ -15,12 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Jerry Duran - Frontend & Design Engineer",
   description: "Portfolio showcasing frontend development and design engineering work",
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon.svg', type: 'image/svg+xml' }
-    ]
-  }
 };
 
 export default function RootLayout({
