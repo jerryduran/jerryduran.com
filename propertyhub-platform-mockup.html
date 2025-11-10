@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PropertyHub - Real Estate Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #1e40af;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .btn-outline:hover {
+            background: #f3f4f6;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 12px 16px;
+            font-size: 16px;
+            border-radius: 8px;
+            outline: none;
+            color: #334155;
+        }
+
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 60px 0;
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Featured Properties */
+        .featured-properties {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+            color: #1e293b;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .property-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .property-image {
+            height: 200px;
+            background: linear-gradient(45deg, #e2e8f0, #cbd5e1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #64748b;
+        }
+
+        .property-tag {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .property-tag.sale {
+            background: #ef4444;
+        }
+
+        .property-info {
+            padding: 24px;
+        }
+
+        .property-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .property-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .property-location {
+            color: #64748b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .property-agent {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .agent-info {
+            flex: 1;
+        }
+
+        .agent-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        .agent-role {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 80px 0;
+            background: #f8fafc;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 40px 32px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .service-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        .service-description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 60px 0 32px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: #3b82f6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 32px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <div class="logo-icon">🏠</div>
+                    PropertyHub
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#buy">Buy</a></li>
+                    <li><a href="#sell">Sell</a></li>
+                    <li><a href="#rent">Rent</a></li>
+                    <li><a href="#agents">Agents</a></li>
+                    <li><a href="#insights">Market Insights</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="#login" class="btn btn-outline">Log In</a>
+                    <a href="#signup" class="btn btn-primary">Sign Up</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Find Your Perfect Home</h1>
+            <p>Discover properties that match your lifestyle with our comprehensive real estate platform</p>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Enter location, property type, or keywords...">
+                <button class="search-btn">Search Properties</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">12,000+</div>
+                    <div class="stat-label">Active Listings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">850+</div>
+                    <div class="stat-label">Expert Agents</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">25,000+</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Cities Covered</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-properties">
+        <div class="container">
+            <h2 class="section-title">Featured Properties</h2>
+            <div class="properties-grid">
+                <div class="property-card">
+                    <div class="property-image">
+                        🏡
+                        <div class="property-tag">For Sale</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">$875,000</div>
+                        <div class="property-title">Modern Family Home</div>
+                        <div class="property-location">📍 San Francisco, CA</div>
+                        <div class="property-features">
+                            <div class="feature">🛏️ 4 Beds</div>
+                            <div class="feature">🚿 3 Baths</div>
+                            <div class="feature">📏 2,400 sq ft</div>
+                        </div>
+                        <div class="property-agent">
+                            <div class="agent-avatar">MJ</div>
+                            <div class="agent-info">
+                                <div class="agent-name">Maria Johnson</div>
+                                <div class="agent-role">Senior Agent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <div class="property-image">
+                        🏢
+                        <div class="property-tag">For Rent</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">$3,200/month</div>
+                        <div class="property-title">Downtown Luxury Apartment</div>
+                        <div class="property-location">📍 Seattle, WA</div>
+                        <div class="property-features">
+                            <div class="feature">🛏️ 2 Beds</div>
+                            <div class="feature">🚿 2 Baths</div>
+                            <div class="feature">📏 1,200 sq ft</div>
+                        </div>
+                        <div class="property-agent">
+                            <div class="agent-avatar">DL</div>
+                            <div class="agent-info">
+                                <div class="agent-name">David Lee</div>
+                                <div class="agent-role">Rental Specialist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <div class="property-image">
+                        🏘️
+                        <div class="property-tag sale">For Sale</div>
+                    </div>
+                    <div class="property-info">
+                        <div class="property-price">$1,250,000</div>
+                        <div class="property-title">Suburban Villa</div>
+                        <div class="property-location">📍 Austin, TX</div>
+                        <div class="property-features">
+                            <div class="feature">🛏️ 5 Beds</div>
+                            <div class="feature">🚿 4 Baths</div>
+                            <div class="feature">📏 3,200 sq ft</div>
+                        </div>
+                        <div class="property-agent">
+                            <div class="agent-avatar">SC</div>
+                            <div class="agent-info">
+                                <div class="agent-name">Sarah Chen</div>
+                                <div class="agent-role">Luxury Specialist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🏠</div>
+                    <h3 class="service-title">Property Search</h3>
+                    <p class="service-description">Find your perfect home with our advanced search filters and personalized recommendations</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💰</div>
+                    <h3 class="service-title">Market Analysis</h3>
+                    <p class="service-description">Get detailed market insights and property valuations to make informed decisions</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🤝</div>
+                    <h3 class="service-title">Expert Guidance</h3>
+                    <p class="service-description">Work with certified agents who understand your local market inside and out</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3 class="service-title">Investment Tools</h3>
+                    <p class="service-description">Access powerful analytics to evaluate investment opportunities and ROI potential</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>PropertyHub</h3>
+                    <p>Your trusted partner in real estate. Find, buy, sell, and rent properties with confidence.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>For Buyers</h3>
+                    <a href="#search">Property Search</a>
+                    <a href="#mortgage">Mortgage Calculator</a>
+                    <a href="#neighborhoods">Neighborhood Guides</a>
+                    <a href="#buying-guide">Buying Guide</a>
+                </div>
+                <div class="footer-section">
+                    <h3>For Sellers</h3>
+                    <a href="#list">List Your Property</a>
+                    <a href="#valuation">Home Valuation</a>
+                    <a href="#selling-guide">Selling Guide</a>
+                    <a href="#marketing">Marketing Tools</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="#help">Help Center</a>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#careers">Careers</a>
+                    <a href="#blog">Blog</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PropertyHub. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

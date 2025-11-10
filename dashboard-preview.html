@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard Preview</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+        }
+
+        .dashboard {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            border: 2px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.5), transparent);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(34, 197, 94, 0.3);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(34, 197, 94, 0.1);
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .metric-change {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .positive {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .negative {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+            height: 400px;
+        }
+
+        .chart-container {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-content {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.3), transparent);
+        }
+
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .table-container {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
+
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.3), transparent);
+        }
+
+        .table-header {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 24px 28px;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px 28px;
+            text-align: left;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.05);
+        }
+
+        th {
+            font-weight: 600;
+            color: #94a3b8;
+            background: transparent;
+            font-size: 14px;
+        }
+
+        td {
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .status-completed {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="dashboard">
+        <div class="header">
+            <div>
+                <h1>Analytics Dashboard</h1>
+                <div class="header-subtitle">Real-time insights and performance metrics</div>
+            </div>
+            <div class="user-info">
+                <span style="color: #94a3b8; margin-right: 12px; font-weight: 500;">Welcome back, Jerry</span>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">24.8K</div>
+                <div class="metric-label">Total Users</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,7 13.5,15.5 8.5,10.5 2,17"></polyline>
+                        <polyline points="16,7 22,7 22,13"></polyline>
+                    </svg>
+                    +12.3%
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$89.2K</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,7 13.5,15.5 8.5,10.5 2,17"></polyline>
+                        <polyline points="16,7 22,7 22,13"></polyline>
+                    </svg>
+                    +8.7%
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">94.2%</div>
+                <div class="metric-label">Performance</div>
+                <div class="metric-change negative">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,17 13.5,8.5 8.5,13.5 2,7"></polyline>
+                        <polyline points="16,17 22,17 22,11"></polyline>
+                    </svg>
+                    -2.1%
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">1.4K</div>
+                <div class="metric-label">Active Sessions</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,7 13.5,15.5 8.5,10.5 2,17"></polyline>
+                        <polyline points="16,7 22,7 22,13"></polyline>
+                    </svg>
+                    +15.8%
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">Revenue Trends</div>
+                <div class="chart-content">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">User Distribution</div>
+                <div class="chart-content">
+                    <canvas id="userChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">Recent Activity</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>john@example.com</td>
+                        <td>Login</td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                        <td>2 min ago</td>
+                    </tr>
+                    <tr>
+                        <td>sarah@example.com</td>
+                        <td>Purchase</td>
+                        <td><span class="status-badge status-completed">Completed</span></td>
+                        <td>5 min ago</td>
+                    </tr>
+                    <tr>
+                        <td>mike@example.com</td>
+                        <td>Logout</td>
+                        <td><span class="status-badge status-inactive">Inactive</span></td>
+                        <td>12 min ago</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [65, 78, 85, 92, 88, 95],
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#22c55e',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(34, 197, 94, 0.1)',
+                            borderColor: 'rgba(34, 197, 94, 0.2)'
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        border: {
+                            color: 'rgba(34, 197, 94, 0.2)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        border: {
+                            color: 'rgba(34, 197, 94, 0.2)'
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10
+                    }
+                }
+            }
+        });
+
+        // User Distribution Chart
+        const userCtx = document.getElementById('userChart').getContext('2d');
+        new Chart(userCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Desktop', 'Mobile', 'Tablet'],
+                datasets: [{
+                    data: [55, 35, 10],
+                    backgroundColor: ['#22c55e', '#16a34a', '#15803d'],
+                    borderWidth: 0,
+                    cutout: '70%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#94a3b8',
+                            padding: 15,
+                            font: {
+                                family: 'Inter',
+                                size: 11,
+                                weight: 500
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 5
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

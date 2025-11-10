@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power of Vitality - Wellness App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f4fd 0%, #c3e9ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #f5f7fa;
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px 8px;
+            background: #0066cc;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .time {
+            color: #fff;
+        }
+
+        .battery-wifi {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+            padding: 20px;
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .greeting {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .points-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .profile-pic {
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #0066cc;
+            font-size: 14px;
+        }
+
+        .vitality-score {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .score-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .score-status {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+            height: calc(100% - 220px);
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 16px;
+        }
+
+        /* Progress Cards */
+        .progress-cards {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .progress-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .progress-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .progress-icon.steps { background: #e3f2fd; color: #1976d2; }
+        .progress-icon.heart { background: #f3e5f5; color: #7b1fa2; }
+        .progress-icon.weight { background: #e8f5e8; color: #388e3c; }
+
+        .progress-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Challenge Card */
+        .challenge-card {
+            background: linear-gradient(135deg, #00c851 0%, #007e33 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .challenge-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .challenge-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .challenge-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .challenge-days {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .challenge-percentage {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 68%;
+            height: 100%;
+            background: #fff;
+            border-radius: 3px;
+        }
+
+        /* Wellness Activities */
+        .wellness-activities {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 16px;
+            border: 1px solid #ecf0f1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .activity-item:active {
+            transform: scale(0.98);
+            background: #f8f9fa;
+        }
+
+        .activity-icon-large {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .activity-icon-large.fitness { background: #e3f2fd; color: #1976d2; }
+        .activity-icon-large.nutrition { background: #fff3e0; color: #f57c00; }
+        .activity-icon-large.mindfulness { background: #f3e5f5; color: #7b1fa2; }
+        .activity-icon-large.sleep { background: #e8eaf6; color: #3f51b5; }
+
+        .activity-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Recent Activities */
+        .recent-activities {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .activity-list-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .activity-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-list-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .activity-list-icon.completed { background: #e8f5e8; color: #388e3c; }
+        .activity-list-icon.pending { background: #fff3e0; color: #f57c00; }
+
+        .activity-list-details {
+            flex: 1;
+        }
+
+        .activity-list-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .activity-list-time {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .activity-list-points {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0066cc;
+            background: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 12px 0 32px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-item.active .nav-icon {
+            background: #0066cc;
+            color: #fff;
+        }
+
+        .nav-item:not(.active) .nav-icon {
+            color: #95a5a6;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-label {
+            color: #0066cc;
+        }
+
+        .nav-item:not(.active) .nav-label {
+            color: #95a5a6;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen">
+            <div class="status-bar">
+                <div class="time">9:41</div>
+                <div class="battery-wifi">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <div class="header">
+                <div class="header-top">
+                    <div class="greeting">Hello, Sarah</div>
+                    <div class="profile-section">
+                        <div class="points-badge">2,450 pts</div>
+                        <div class="profile-pic">SM</div>
+                    </div>
+                </div>
+                <div class="vitality-score">
+                    <div class="score-number">72</div>
+                    <div class="score-label">Vitality Score</div>
+                    <div class="score-status">Good Progress</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <h3 class="section-title">Today's Progress</h3>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <div class="progress-icon steps">👟</div>
+                        <div class="progress-value">7,240</div>
+                        <div class="progress-label">Steps</div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon heart">❤️</div>
+                        <div class="progress-value">72</div>
+                        <div class="progress-label">Avg BPM</div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon weight">⚖️</div>
+                        <div class="progress-value">142</div>
+                        <div class="progress-label">Weight</div>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-title">30-Day Wellness Challenge</div>
+                    <div class="challenge-description">Complete daily wellness activities to earn rewards</div>
+                    <div class="challenge-progress">
+                        <div class="challenge-days">Day 20 of 30</div>
+                        <div class="challenge-percentage">68%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="wellness-activities">
+                    <h3 class="section-title">Wellness Activities</h3>
+                    <div class="activity-grid">
+                        <div class="activity-item">
+                            <div class="activity-icon-large fitness">🏋️</div>
+                            <div class="activity-name">Fitness</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon-large nutrition">🥗</div>
+                            <div class="activity-name">Nutrition</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon-large mindfulness">🧘</div>
+                            <div class="activity-name">Mindfulness</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon-large sleep">😴</div>
+                            <div class="activity-name">Sleep</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <h3 class="section-title">Recent Activities</h3>
+                    <div class="activity-list-item">
+                        <div class="activity-list-icon completed">✅</div>
+                        <div class="activity-list-details">
+                            <div class="activity-list-name">Daily Workout</div>
+                            <div class="activity-list-time">Completed today</div>
+                        </div>
+                        <div class="activity-list-points">+50 pts</div>
+                    </div>
+                    <div class="activity-list-item">
+                        <div class="activity-list-icon pending">⏰</div>
+                        <div class="activity-list-details">
+                            <div class="activity-list-name">Health Assessment</div>
+                            <div class="activity-list-time">Due tomorrow</div>
+                        </div>
+                        <div class="activity-list-points">+100 pts</div>
+                    </div>
+                    <div class="activity-list-item">
+                        <div class="activity-list-icon completed">✅</div>
+                        <div class="activity-list-details">
+                            <div class="activity-list-name">Mindfulness Session</div>
+                            <div class="activity-list-time">Yesterday</div>
+                        </div>
+                        <div class="activity-list-points">+25 pts</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-item active">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🎯</div>
+                    <div class="nav-label">Goals</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Progress</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🏆</div>
+                    <div class="nav-label">Rewards</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+</body>
+</html>
