@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +10,30 @@ export const metadata: Metadata = {
 
 export default function LoomisPetWasteCaseStudy() {
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
+    <>
+      <Script
+        id="meta-pixel"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1354437669766847');
+            fbq('track', 'PageView');
+          `,
+        }}
+      />
+      <noscript>
+        <img height="1" width="1" style={{display:'none'}}
+             src="https://www.facebook.com/tr?id=1354437669766847&ev=PageView&noscript=1" />
+      </noscript>
+      <div className="min-h-screen bg-white dark:bg-black">
       <main className="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-16">
         <Link
           href="/"
@@ -185,6 +209,7 @@ export default function LoomisPetWasteCaseStudy() {
           </Link>
         </div>
       </main>
-    </div>
+      </div>
+    </>
   );
 }
