@@ -88,7 +88,6 @@ export default function AppleIcon() {
               background: '#1f2937',
               borderRadius: '50%',
               position: 'relative',
-              display: 'flex',
             }}>
               {/* Eye highlight */}
               <div style={{
@@ -119,8 +118,7 @@ export default function AppleIcon() {
             border: '6px solid #1f2937',
             borderTop: 'none',
             borderRadius: '0 0 60px 60px',
-            position: 'relative',
-            display: 'flex'
+            position: 'relative'
           }}>
             {/* Tongue */}
             <div style={{
